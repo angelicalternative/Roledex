@@ -136,7 +136,7 @@ function App() {
             title="Download a backup of all contacts"
             onClick={() => downloadFile("roledex-contacts.json", exportContactsJson(contacts), "application/json")}
           >
-            Export JSON
+            JSON
           </button>
           <button
             type="button"
@@ -144,7 +144,7 @@ function App() {
             title="Download contacts as a spreadsheet"
             onClick={() => downloadFile("roledex-contacts.csv", contactsToCsv(contacts), "text/csv")}
           >
-            Export CSV
+            CSV
           </button>
         </div>
       </header>

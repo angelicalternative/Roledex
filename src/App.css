@@ -193,11 +193,11 @@
 .search-input {
   flex: 1;
   min-width: 220px;
-  padding: 10px 14px;
+  padding: 12px 14px;
   border-radius: 9px;
   border: 1px solid var(--border);
   background: var(--surface);
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .search-input:focus,
@@ -254,12 +254,16 @@ select:focus {
 .rolodex-perspective {
   perspective: 1600px;
   width: 340px;
-  height: 210px;
+  height: 230px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   border-radius: 14px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
 }
 
 .rolodex-drum {
@@ -269,11 +273,20 @@ select:focus {
   transform-style: preserve-3d;
 }
 
+.rolodex-drum.dragging {
+  cursor: grabbing;
+}
+
 .drum-card-outer {
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
+  will-change: transform;
   transition: transform 0.45s cubic-bezier(0.22, 0.8, 0.36, 1), opacity 0.45s ease;
+}
+
+.rolodex-drum.dragging .drum-card-outer {
+  transition: none;
 }
 
 .drum-card-flip {
@@ -406,7 +419,7 @@ select:focus {
 
 .back-label textarea {
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 400;
   color: var(--ink);
   resize: none;
@@ -485,10 +498,23 @@ select:focus {
 }
 
 .rolodex-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
   text-align: center;
   font-size: 12.5px;
   color: var(--ink-faint);
   font-family: var(--font-mono);
+}
+
+.rolodex-hint {
+  color: var(--ink-soft);
+}
+
+.rolodex-count-sep {
+  opacity: 0.5;
 }
 
 /* ---------- Empty state ---------- */
@@ -588,11 +614,11 @@ label {
 input,
 select,
 textarea {
-  padding: 9px 11px;
+  padding: 11px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--surface);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: var(--ink);
 }
@@ -993,28 +1019,165 @@ textarea {
 
 @media (max-width: 720px) {
   .app-header {
-    padding: 12px 16px;
+    padding: 10px 14px;
+    gap: 10px;
+  }
+
+  .brand h1 {
+    font-size: 17px;
+  }
+
+  .tabs {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .tab-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 11px 10px;
+  }
+
+  .header-actions {
+    margin-left: auto;
+    gap: 6px;
+  }
+
+  .header-actions .btn {
+    padding: 8px 10px;
+    font-size: 12.5px;
   }
 
   .app-main {
-    padding: 16px;
+    padding: 14px;
+  }
+
+  .rolodex-view {
+    gap: 14px;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .toolbar-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 8px;
+  }
+
+  .toolbar-actions .btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .rolodex-stage {
+    flex-direction: column;
+    min-height: 0;
+    gap: 14px;
   }
 
   .rolodex-drum-wrap {
-    padding: 16px 10px;
+    padding: 18px 6px;
     width: 100%;
   }
 
   .rolodex-perspective {
-    width: 260px;
-    height: 190px;
+    width: min(320px, 84vw);
+    height: 320px;
+  }
+
+  .drum-nav {
+    width: 52px;
+    height: 40px;
+    font-size: 15px;
   }
 
   .az-index {
-    max-height: 420px;
+    flex-direction: row;
+    width: 100%;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: visible;
+    justify-content: flex-start;
+    padding: 8px 10px;
+    gap: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .az-tab {
+    flex: 0 0 auto;
+    font-size: 13px;
+    padding: 8px 9px;
+    min-width: 30px;
+  }
+
+  .rolodex-counter {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .rolodex-count-sep {
+    display: none;
+  }
+
+  .card-name {
+    font-size: 20px;
+  }
+
+  .card-flip-hint {
+    font-size: 11.5px;
+  }
+
+  .back-label textarea {
+    min-height: 120px;
+  }
+
+  .chip-toggle,
+  .icon-btn,
+  .drum-nav {
+    min-height: 40px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .modal {
+    border-radius: 16px 16px 0 0;
+    max-height: 92vh;
+  }
+
+  .modal-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .contact-form .modal-actions {
+    flex-wrap: wrap;
+  }
+
+  .contact-form .modal-actions .btn {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .dinner-grid {
+    grid-template-columns: 1fr;
   }
 
   .match-row {
     flex-wrap: wrap;
+  }
+
+  .match-row .btn {
+    width: 100%;
+  }
+
+  .dinner-month-panel {
+    padding: 16px;
   }
 }

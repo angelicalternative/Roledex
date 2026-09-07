@@ -9,7 +9,6 @@ interface Props {
   radius: number;
   isFront: boolean;
   isFlipped: boolean;
-  onSelect: () => void;
   onFlip: () => void;
   onEdit: () => void;
   onToggleDinner: () => void;
@@ -23,7 +22,6 @@ export default function ContactCard({
   radius,
   isFront,
   isFlipped,
-  onSelect,
   onFlip,
   onEdit,
   onToggleDinner,
@@ -36,24 +34,19 @@ export default function ContactCard({
 
   const outerStyle: CSSProperties = {
     transform: `rotateX(${diff * stepDeg}deg) translateZ(${radius}px)`,
-    opacity: absDiff > 6 ? 0 : Math.max(0.12, 1 - absDiff * 0.16),
+    opacity: absDiff > 6 ? 0 : Math.max(0.06, 1 - absDiff * 0.32),
     zIndex: 1000 - absDiff,
-    pointerEvents: absDiff > 6 ? "none" : "auto",
-  };
-
-  const handleClick = () => {
-    if (!isFront) {
-      onSelect();
-      return;
-    }
-    onFlip();
+    // Cards share a 3D (preserve-3d) rendering context, where Chromium paints by actual
+    // rotated depth rather than honoring z-index — so a background card can visually cover
+    // the front one. Only the front card may receive pointer events, or taps land ambiguously.
+    pointerEvents: isFront ? "auto" : "none",
   };
 
   return (
     <div className="drum-card-outer" style={outerStyle}>
       <div
         className={`drum-card-flip ${isFlipped && isFront ? "flipped" : ""}`}
-        onClick={handleClick}
+        onClick={onFlip}
         role="button"
         tabIndex={isFront ? 0 : -1}
       >
@@ -75,7 +68,7 @@ export default function ContactCard({
             {contact.phone && <p className="card-line">☎ {contact.phone}</p>}
           </div>
           {contact.isDinnerGuest && <div className="card-dinner-badge" title="Dinner club guest">🍽️</div>}
-          {isFront && <p className="card-flip-hint">click to flip →</p>}
+          {isFront && <p className="card-flip-hint">tap to flip →</p>}
         </div>
 
         <div className="card-face card-back" style={{ borderTopColor: color }} onClick={(e) => e.stopPropagation()}>
