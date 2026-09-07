@@ -8,14 +8,20 @@ export interface Contact {
   email: string;
   phone: string;
   notes: string;
+  /** True while this person is one of the current (or a past) month's networking picks. */
   isDinnerGuest: boolean;
   dinnerNotes: string;
+  /** "YYYY-MM" of the month they were picked for. Empty until they're ever picked. */
+  dinnerMonth: string;
   color: string;
   createdAt: number;
   updatedAt: number;
 }
 
-export type ContactInput = Omit<Contact, "id" | "createdAt" | "updatedAt" | "color">;
+export type ContactInput = Omit<
+  Contact,
+  "id" | "createdAt" | "updatedAt" | "color" | "isDinnerGuest" | "dinnerNotes" | "dinnerMonth"
+>;
 
 export const INDUSTRY_OPTIONS = [
   "Technology",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import "./App.css";
 import RolodexView from "./components/RolodexView";
 import DinnerClubView from "./components/DinnerClubView";
@@ -7,6 +7,7 @@ import ImportModal from "./components/ImportModal";
 import { useContacts, contactsToCsv, downloadFile, exportContactsJson } from "./lib/storage";
 import { makeId } from "./lib/id";
 import { colorForName } from "./lib/colors";
+import { getMonthKey, getMonthLabel, MONTHLY_GUEST_LIMIT } from "./lib/matching";
 import type { Contact, ContactInput } from "./types";
 
 type Tab = "rolodex" | "dinner";
@@ -16,12 +17,23 @@ function App() {
   const [tab, setTab] = useState<Tab>("rolodex");
   const [formTarget, setFormTarget] = useState<Contact | null | "new">(null);
   const [showImport, setShowImport] = useState(false);
+  const [toast, setToast] = useState("");
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const notify = useCallback((message: string) => {
+    setToast(message);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(""), 3400);
+  }, []);
 
   const addContact = (input: ContactInput) => {
     const now = Date.now();
     const contact: Contact = {
       ...input,
       id: makeId(),
+      isDinnerGuest: false,
+      dinnerNotes: "",
+      dinnerMonth: "",
       color: colorForName(input.firstName + input.lastName),
       createdAt: now,
       updatedAt: now,
@@ -48,10 +60,29 @@ function App() {
     );
   };
 
+  /** Picks or un-picks someone as a networking guest for the current month, enforcing the monthly cap. */
   const toggleDinner = (id: string) => {
-    setContacts((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, isDinnerGuest: !c.isDinnerGuest, updatedAt: Date.now() } : c)),
-    );
+    const monthKey = getMonthKey();
+    let blocked = false;
+    setContacts((prev) => {
+      const target = prev.find((c) => c.id === id);
+      if (!target) return prev;
+
+      if (!target.isDinnerGuest) {
+        const activeThisMonth = prev.filter((c) => c.isDinnerGuest && c.dinnerMonth === monthKey).length;
+        if (activeThisMonth >= MONTHLY_GUEST_LIMIT) {
+          blocked = true;
+          return prev;
+        }
+        return prev.map((c) =>
+          c.id === id ? { ...c, isDinnerGuest: true, dinnerMonth: monthKey, updatedAt: Date.now() } : c,
+        );
+      }
+      return prev.map((c) => (c.id === id ? { ...c, isDinnerGuest: false, updatedAt: Date.now() } : c));
+    });
+    if (blocked) {
+      notify(`Your ${MONTHLY_GUEST_LIMIT} networking picks for ${getMonthLabel(monthKey)} are already set — remove one first.`);
+    }
   };
 
   const importContacts = (inputs: ContactInput[]) => {
@@ -59,6 +90,9 @@ function App() {
     const newContacts: Contact[] = inputs.map((input) => ({
       ...input,
       id: makeId(),
+      isDinnerGuest: false,
+      dinnerNotes: "",
+      dinnerMonth: "",
       color: colorForName(input.firstName + input.lastName),
       createdAt: now,
       updatedAt: now,
@@ -67,7 +101,8 @@ function App() {
     setShowImport(false);
   };
 
-  const dinnerCount = contacts.filter((c) => c.isDinnerGuest).length;
+  const currentMonthKey = getMonthKey();
+  const dinnerCount = contacts.filter((c) => c.isDinnerGuest && c.dinnerMonth === currentMonthKey).length;
 
   return (
     <div className="app-shell">
@@ -91,7 +126,7 @@ function App() {
             onClick={() => setTab("dinner")}
           >
             The Dinner Guest
-            <span className="tab-count">{dinnerCount}</span>
+            <span className="tab-count">{dinnerCount}/{MONTHLY_GUEST_LIMIT}</span>
           </button>
         </nav>
         <div className="header-actions">
@@ -130,6 +165,7 @@ function App() {
             onEdit={(c) => setFormTarget(c)}
             onToggleDinner={toggleDinner}
             onPatch={patchContact}
+            notify={notify}
           />
         )}
       </main>
@@ -149,6 +185,8 @@ function App() {
       {showImport && (
         <ImportModal existing={contacts} onImport={importContacts} onClose={() => setShowImport(false)} />
       )}
+
+      {toast && <div className="toast">{toast}</div>}
     </div>
   );
 }

@@ -37,6 +37,45 @@ export function useContacts() {
   return [contacts, setContacts] as const;
 }
 
+const DINNER_GOALS_KEY = "roledex.dinnerGoals.v1";
+
+function loadDinnerGoals(): Record<string, string> {
+  try {
+    const raw = localStorage.getItem(DINNER_GOALS_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function persistDinnerGoals(goals: Record<string, string>) {
+  try {
+    localStorage.setItem(DINNER_GOALS_KEY, JSON.stringify(goals));
+  } catch {
+    // ignore
+  }
+}
+
+/** Per-month "what are we networking for" text, keyed by "YYYY-MM". */
+export function useDinnerGoals() {
+  const [goals, setGoalsState] = useState<Record<string, string>>(() => loadDinnerGoals());
+
+  useEffect(() => {
+    persistDinnerGoals(goals);
+  }, [goals]);
+
+  const setGoals = useCallback(
+    (updater: Record<string, string> | ((prev: Record<string, string>) => Record<string, string>)) => {
+      setGoalsState(updater);
+    },
+    [],
+  );
+
+  return [goals, setGoals] as const;
+}
+
 export function exportContactsJson(contacts: Contact[]): string {
   return JSON.stringify(contacts, null, 2);
 }
@@ -65,6 +104,7 @@ export function contactsToCsv(contacts: Contact[]): string {
     "notes",
     "isDinnerGuest",
     "dinnerNotes",
+    "dinnerMonth",
   ];
   const escape = (v: string) => `"${String(v).replace(/"/g, '""')}"`;
   const rows = contacts.map((c) =>

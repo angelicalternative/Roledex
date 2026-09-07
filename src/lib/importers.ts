@@ -16,8 +16,6 @@ function blankInput(): ContactInput {
     email: "",
     phone: "",
     notes: "",
-    isDinnerGuest: false,
-    dinnerNotes: "",
   };
 }
 

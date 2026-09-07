@@ -20,11 +20,18 @@ function toInput(c?: Contact | null): ContactInput {
       email: "",
       phone: "",
       notes: "",
-      isDinnerGuest: false,
-      dinnerNotes: "",
     };
   }
-  const { id: _id, createdAt: _c, updatedAt: _u, color: _col, ...rest } = c;
+  const {
+    id: _id,
+    createdAt: _c,
+    updatedAt: _u,
+    color: _col,
+    isDinnerGuest: _idg,
+    dinnerNotes: _dn,
+    dinnerMonth: _dm,
+    ...rest
+  } = c;
   return rest;
 }
 
@@ -132,27 +139,6 @@ export default function ContactFormModal({ initial, onSave, onDelete, onClose }:
               rows={3}
             />
           </label>
-
-          <label className="checkbox-row">
-            <input
-              type="checkbox"
-              checked={form.isDinnerGuest}
-              onChange={(e) => set("isDinnerGuest", e.target.checked)}
-            />
-            Invite to The Dinner Guest club 🍽️
-          </label>
-
-          {form.isDinnerGuest && (
-            <label className="full-width">
-              Dinner club notes
-              <textarea
-                value={form.dinnerNotes}
-                onChange={(e) => set("dinnerNotes", e.target.value)}
-                placeholder="Allergies, favorite cuisine, who introduced you…"
-                rows={2}
-              />
-            </label>
-          )}
 
           <div className="modal-actions">
             {isEdit && onDelete && (
