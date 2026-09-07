@@ -1,0 +1,79 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f3ead9;
+  --bg-2: #e9dcc3;
+  --surface: #fffaf0;
+  --surface-2: #f6ecd9;
+  --ink: #2b2118;
+  --ink-soft: #6b5d4d;
+  --ink-faint: #9c8c76;
+  --border: #ddccab;
+  --accent: #b5432c;
+  --accent-ink: #fff8ee;
+  --accent-2: #2f6f5e;
+  --card-bg: #fffdf6;
+  --card-border: #e6d7b8;
+  --shadow: 43, 33, 24;
+  --danger: #b5432c;
+  --font: "Iowan Old Style", "Palatino Linotype", Georgia, "Segoe UI", system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1712;
+    --bg-2: #241d16;
+    --surface: #2a2219;
+    --surface-2: #241d16;
+    --ink: #f1e6d3;
+    --ink-soft: #c4b39a;
+    --ink-faint: #85765f;
+    --border: #4a3d2c;
+    --accent: #e2704f;
+    --accent-ink: #1c1712;
+    --accent-2: #5fae97;
+    --card-bg: #2e2519;
+    --card-border: #4a3d2c;
+    --shadow: 0, 0, 0;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+body {
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 600;
+}
