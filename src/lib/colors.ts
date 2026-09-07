@@ -1,14 +1,14 @@
 const CARD_COLORS = [
-  "#3d7ea6",
-  "#2f9494",
-  "#6f6bb0",
-  "#4a8f6b",
-  "#5b7fc7",
-  "#8a63b8",
-  "#3c9bb0",
-  "#7a72d1",
-  "#4f9c7c",
-  "#5a86a4",
+  "#e0328e",
+  "#0aa5b8",
+  "#8b5cf6",
+  "#f2a72e",
+  "#12b886",
+  "#ff7a45",
+  "#5b8def",
+  "#d6499b",
+  "#2fb8a8",
+  "#a05bd6",
 ];
 
 export function colorForName(name: string): string {

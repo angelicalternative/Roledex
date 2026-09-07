@@ -1,73 +1,80 @@
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
 
 :root {
   color-scheme: light dark;
 
-  --bg: #eef1f5;
-  --bg-2: #e3e8ee;
+  --bg: #f6f0ff;
+  --bg-2: #efe1ff;
   --surface: #ffffff;
-  --surface-2: #f5f7fa;
-  --ink: #212a37;
-  --ink-soft: #5c6774;
-  --ink-faint: #96a1ac;
-  --border: #dde3ea;
+  --surface-2: #fbf5ff;
+  --ink: #2a1b4d;
+  --ink-soft: #6b5b8f;
+  --ink-faint: #a596c4;
+  --border: #e2d4fb;
 
-  --accent: #2f7a86;
-  --accent-soft: #e4f0f1;
+  --accent: #d1277e;
+  --accent-rgb: 209, 39, 126;
+  --accent-soft: #ffe3f1;
   --accent-ink: #ffffff;
-  --accent-2: #6f6bb0;
-  --accent-2-soft: #ecebf7;
+  --accent-2: #0891a8;
+  --accent-2-rgb: 8, 145, 168;
+  --accent-2-soft: #d9f7fa;
   --accent-2-ink: #ffffff;
 
-  --danger: #c0524a;
-  --shadow: 33, 43, 56;
+  --danger: #e0435a;
+  --shadow: 60, 20, 120;
 
-  --font-display: "Sora", "Segoe UI", system-ui, sans-serif;
-  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-accent: "Orbitron", var(--font-display);
+  --font-body: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "SF Mono", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #10151d;
-    --bg-2: #161d27;
-    --surface: #1a2029;
-    --surface-2: #1f2732;
-    --ink: #e7ecf2;
-    --ink-soft: #a9b4c1;
-    --ink-faint: #6d7885;
-    --border: #2b3542;
+    --bg: #150a2e;
+    --bg-2: #1c0f3a;
+    --surface: #1f1140;
+    --surface-2: #190d36;
+    --ink: #f3ecff;
+    --ink-soft: #c3b3e8;
+    --ink-faint: #8577ad;
+    --border: #3a2461;
 
-    --accent: #63b0ba;
-    --accent-soft: #17282b;
-    --accent-ink: #08171a;
-    --accent-2: #a79bdc;
-    --accent-2-soft: #221f33;
-    --accent-2-ink: #170f2b;
+    --accent: #ff7ad1;
+    --accent-rgb: 255, 122, 209;
+    --accent-soft: #3a1030;
+    --accent-ink: #2a0a1f;
+    --accent-2: #2de2e6;
+    --accent-2-rgb: 45, 226, 230;
+    --accent-2-soft: #0d2b2c;
+    --accent-2-ink: #04282b;
 
-    --danger: #e0897e;
+    --danger: #ff7a86;
     --shadow: 0, 0, 0;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #10151d;
-  --bg-2: #161d27;
-  --surface: #1a2029;
-  --surface-2: #1f2732;
-  --ink: #e7ecf2;
-  --ink-soft: #a9b4c1;
-  --ink-faint: #6d7885;
-  --border: #2b3542;
+  --bg: #150a2e;
+  --bg-2: #1c0f3a;
+  --surface: #1f1140;
+  --surface-2: #190d36;
+  --ink: #f3ecff;
+  --ink-soft: #c3b3e8;
+  --ink-faint: #8577ad;
+  --border: #3a2461;
 
-  --accent: #63b0ba;
-  --accent-soft: #17282b;
-  --accent-ink: #08171a;
-  --accent-2: #a79bdc;
-  --accent-2-soft: #221f33;
-  --accent-2-ink: #170f2b;
+  --accent: #ff7ad1;
+  --accent-rgb: 255, 122, 209;
+  --accent-soft: #3a1030;
+  --accent-ink: #2a0a1f;
+  --accent-2: #2de2e6;
+  --accent-2-rgb: 45, 226, 230;
+  --accent-2-soft: #0d2b2c;
+  --accent-2-ink: #04282b;
 
-  --danger: #e0897e;
+  --danger: #ff7a86;
   --shadow: 0, 0, 0;
 }
 
@@ -79,13 +86,17 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
 }
 
 body {
   min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% -10%, rgba(var(--accent-rgb), 0.16), transparent 42%),
+    radial-gradient(circle at 90% 110%, rgba(var(--accent-2-rgb), 0.16), transparent 45%),
+    var(--bg);
+  background-attachment: fixed;
 }
 
 #root {
