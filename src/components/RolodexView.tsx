@@ -168,7 +168,7 @@ export default function RolodexView({
               contact={current}
               onEdit={() => onEdit(current)}
               onToggleDinner={() => onToggleDinner(current.id)}
-              onNotesChange={(notes) => onPatch(current.id, { notes })}
+              onPatch={(patch) => onPatch(current.id, patch)}
             />
           )}
         </>

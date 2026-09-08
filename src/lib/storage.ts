@@ -102,13 +102,21 @@ export function contactsToCsv(contacts: Contact[]): string {
     "email",
     "phone",
     "notes",
+    "diningNotes",
+    "placeTypes",
     "isDinnerGuest",
     "dinnerNotes",
     "dinnerMonth",
   ];
   const escape = (v: string) => `"${String(v).replace(/"/g, '""')}"`;
   const rows = contacts.map((c) =>
-    headers.map((h) => escape(String((c as unknown as Record<string, unknown>)[h] ?? ""))).join(","),
+    headers
+      .map((h) => {
+        const raw = (c as unknown as Record<string, unknown>)[h];
+        const value = Array.isArray(raw) ? raw.join("; ") : (raw ?? "");
+        return escape(String(value));
+      })
+      .join(","),
   );
   return [headers.join(","), ...rows].join("\n");
 }

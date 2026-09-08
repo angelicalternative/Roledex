@@ -10,6 +10,10 @@ export interface Contact {
   notes: string;
   /** Optional data URL for a headshot. Empty string when the contact has no photo. */
   photoUrl: string;
+  /** Freeform notes on where they'd like to eat — a favorite spot, an allergy, a craving. */
+  diningNotes: string;
+  /** Kinds of places they're into, picked from PLACE_TYPE_OPTIONS. */
+  placeTypes: string[];
   /** True while this person is one of the current (or a past) month's networking picks. */
   isDinnerGuest: boolean;
   dinnerNotes: string;
@@ -24,6 +28,19 @@ export type ContactInput = Omit<
   Contact,
   "id" | "createdAt" | "updatedAt" | "color" | "isDinnerGuest" | "dinnerNotes" | "dinnerMonth"
 >;
+
+export const PLACE_TYPE_OPTIONS = [
+  "Italian",
+  "Japanese / Sushi",
+  "Steakhouse",
+  "Seafood",
+  "Vegan / Vegetarian",
+  "Mexican",
+  "Brunch / Café",
+  "Fine Dining",
+  "Casual / Comfort Food",
+  "Wine / Cocktail Bar",
+] as const;
 
 export const INDUSTRY_OPTIONS = [
   "Technology",

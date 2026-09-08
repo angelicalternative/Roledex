@@ -12,10 +12,10 @@
   --ink-faint: #a89f8e;
   --border: #ddd2bd;
 
-  --accent: #5fa8d3;
-  --accent-rgb: 95, 168, 211;
-  --accent-soft: #e4f2fa;
-  --accent-ink: #123247;
+  --accent: #d9a53c;
+  --accent-rgb: 217, 165, 60;
+  --accent-soft: #faf1dc;
+  --accent-ink: #3a2a0c;
   --accent-2: #6f9179;
   --accent-2-rgb: 111, 145, 121;
   --accent-2-soft: #e7efe3;
@@ -51,10 +51,10 @@
     --ink-faint: #8a8071;
     --border: #3a3226;
 
-    --accent: #8ecfee;
-    --accent-rgb: 142, 207, 238;
-    --accent-soft: #1c3542;
-    --accent-ink: #06202c;
+    --accent: #e8c368;
+    --accent-rgb: 232, 195, 104;
+    --accent-soft: #3a2f16;
+    --accent-ink: #241a06;
     --accent-2: #b8cca0;
     --accent-2-rgb: 184, 204, 160;
     --accent-2-soft: #26301f;
@@ -83,10 +83,10 @@
   --ink-faint: #8a8071;
   --border: #3a3226;
 
-  --accent: #f0b8d6;
-  --accent-rgb: 240, 184, 214;
-  --accent-soft: #3a2430;
-  --accent-ink: #2c1220;
+  --accent: #e8c368;
+  --accent-rgb: 232, 195, 104;
+  --accent-soft: #3a2f16;
+  --accent-ink: #241a06;
   --accent-2: #b8cca0;
   --accent-2-rgb: 184, 204, 160;
   --accent-2-soft: #26301f;

@@ -701,6 +701,24 @@ select:focus {
   color: var(--accent-2-ink);
 }
 
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.place-type-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.place-type-grid .chip-toggle {
+  flex: 0 0 auto;
+}
+
 /* ---------- Empty state ---------- */
 
 .empty-state {

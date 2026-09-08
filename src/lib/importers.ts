@@ -17,6 +17,8 @@ function blankInput(): ContactInput {
     phone: "",
     notes: "",
     photoUrl: "",
+    diningNotes: "",
+    placeTypes: [],
   };
 }
 

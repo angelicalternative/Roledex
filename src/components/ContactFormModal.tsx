@@ -1,6 +1,6 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import type { Contact, ContactInput } from "../types";
-import { INDUSTRY_OPTIONS } from "../types";
+import { INDUSTRY_OPTIONS, PLACE_TYPE_OPTIONS } from "../types";
 import { colorForName, initials } from "../lib/colors";
 import { resizeImageFile } from "../lib/photo";
 
@@ -23,6 +23,8 @@ function toInput(c?: Contact | null): ContactInput {
       phone: "",
       notes: "",
       photoUrl: "",
+      diningNotes: "",
+      placeTypes: [],
     };
   }
   const {
@@ -35,7 +37,7 @@ function toInput(c?: Contact | null): ContactInput {
     dinnerMonth: _dm,
     ...rest
   } = c;
-  return rest;
+  return { ...rest, diningNotes: rest.diningNotes ?? "", placeTypes: rest.placeTypes ?? [] };
 }
 
 export default function ContactFormModal({ initial, onSave, onDelete, onClose }: Props) {
@@ -67,6 +69,14 @@ export default function ContactFormModal({ initial, onSave, onDelete, onClose }:
   };
 
   const avatarColor = colorForName(form.firstName + form.lastName);
+
+  const togglePlaceType = (opt: string) => {
+    setForm((f) =>
+      f.placeTypes.includes(opt)
+        ? { ...f, placeTypes: f.placeTypes.filter((p) => p !== opt) }
+        : { ...f, placeTypes: [...f.placeTypes, opt] },
+    );
+  };
 
   return (
     <div className="modal-backdrop" onMouseDown={onClose}>
@@ -184,6 +194,32 @@ export default function ContactFormModal({ initial, onSave, onDelete, onClose }:
               rows={3}
             />
           </label>
+
+          <label className="full-width">
+            Where they'd like to eat
+            <textarea
+              value={form.diningNotes}
+              onChange={(e) => set("diningNotes", e.target.value)}
+              placeholder="A favorite spot, an allergy, a craving they mentioned…"
+              rows={2}
+            />
+          </label>
+
+          <div className="full-width">
+            <span className="field-label">Kinds of places</span>
+            <div className="place-type-grid">
+              {PLACE_TYPE_OPTIONS.map((opt) => (
+                <button
+                  type="button"
+                  key={opt}
+                  className={`chip-toggle ${form.placeTypes.includes(opt) ? "on" : ""}`}
+                  onClick={() => togglePlaceType(opt)}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="modal-actions">
             {isEdit && onDelete && (
