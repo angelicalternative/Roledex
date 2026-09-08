@@ -24,9 +24,10 @@
   --danger: #c1584f;
   --shadow: 40, 30, 20;
 
-  --dial-edge: #a39a8b;
-  --dial-face: #e9e2d3;
-  --dial-hole-bg: #fffdf8;
+  --dial-metal-1: #e2e4e6;
+  --dial-metal-2: #9a9ea3;
+  --dial-metal-3: #75797e;
+  --dial-hole-bg: #f2ebdd;
 
   --paper: #f2e8d2;
   --paper-2: #e9dcbe;
@@ -62,8 +63,9 @@
     --danger: #e08277;
     --shadow: 0, 0, 0;
 
-    --dial-edge: #2b2620;
-    --dial-face: #322c24;
+    --dial-metal-1: #6b6e72;
+    --dial-metal-2: #3a3c3f;
+    --dial-metal-3: #232426;
     --dial-hole-bg: #241f18;
 
     --paper: #2c2519;
@@ -93,8 +95,9 @@
   --danger: #e08277;
   --shadow: 0, 0, 0;
 
-  --dial-edge: #2b2620;
-  --dial-face: #322c24;
+  --dial-metal-1: #6b6e72;
+  --dial-metal-2: #3a3c3f;
+  --dial-metal-3: #232426;
   --dial-hole-bg: #241f18;
 
   --paper: #2c2519;

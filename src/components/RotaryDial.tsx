@@ -9,8 +9,10 @@ interface Props {
   onStep: (deltaSteps: number) => void;
 }
 
-const STEP_DEG = 34;
-const WINDOW = 6;
+// A real rotary dial only has room for 10 holes, so once the address book has
+// more contacts than that, the physical ring is reused in pages of 10 — spin
+// past the last hole in a page and the whole ring reloads with the next batch.
+const PAGE_SIZE = 10;
 const DRAG_TAP_THRESHOLD_DEG = 3;
 
 function angleFromCenter(clientX: number, clientY: number, cx: number, cy: number): number {
@@ -24,13 +26,17 @@ function shortestAngleDelta(from: number, to: number): number {
   return delta;
 }
 
+function wrap(n: number, mod: number): number {
+  return ((n % mod) + mod) % mod;
+}
+
 export default function RotaryDial({ contacts, currentIndex, onSelect, onStep }: Props) {
   const total = contacts.length;
   const wrapRef = useRef<HTMLDivElement>(null);
   const [radius, setRadius] = useState(120);
   const [dragStepOffset, setDragStepOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const dragRef = useRef({ active: false, centerX: 0, centerY: 0, startAngle: 0, lastAngle: 0, moved: false });
+  const dragRef = useRef({ active: false, centerX: 0, centerY: 0, lastAngle: 0, accumulatedDeg: 0, moved: false, degPerStep: 36 });
   const suppressClickRef = useRef(false);
 
   useLayoutEffect(() => {
@@ -46,9 +52,21 @@ export default function RotaryDial({ contacts, currentIndex, onSelect, onStep }:
     return () => ro.disconnect();
   }, []);
 
+  // displayIndex is a continuous (fractional while dragging) position in the
+  // full contact list; liveIndex is the nearest whole contact it rests on.
   const displayIndex = total === 0 ? 0 : currentIndex - dragStepOffset;
-  const liveIndex = total === 0 ? 0 : ((Math.round(displayIndex) % total) + total) % total;
+  const wrappedDisplay = total === 0 ? 0 : wrap(displayIndex, total);
+  const liveIndex = total === 0 ? 0 : Math.round(wrappedDisplay) % total;
   const current = contacts[liveIndex];
+
+  // Which page of (at most) 10 contacts is currently loaded onto the physical
+  // ring, and how the holes in that page are spaced around the full circle.
+  const pageCount = total === 0 ? 0 : Math.ceil(total / PAGE_SIZE);
+  const page = total === 0 ? 0 : Math.min(Math.floor(Math.round(wrappedDisplay) / PAGE_SIZE), pageCount - 1);
+  const pageStart = page * PAGE_SIZE;
+  const pageSize = total === 0 ? 0 : Math.min(PAGE_SIZE, total - pageStart);
+  const angleStep = pageSize > 0 ? 360 / pageSize : 36;
+  const localDisplay = wrappedDisplay - pageStart;
 
   const handlePointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     if (total === 0) return;
@@ -56,22 +74,25 @@ export default function RotaryDial({ contacts, currentIndex, onSelect, onStep }:
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     const startAngle = angleFromCenter(e.clientX, e.clientY, cx, cy);
-    dragRef.current = { active: true, centerX: cx, centerY: cy, startAngle, lastAngle: startAngle, moved: false };
+    dragRef.current = { active: true, centerX: cx, centerY: cy, lastAngle: startAngle, accumulatedDeg: 0, moved: false, degPerStep: angleStep };
   };
 
   const handlePointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
     const st = dragRef.current;
     if (!st.active) return;
     const angle = angleFromCenter(e.clientX, e.clientY, st.centerX, st.centerY);
-    const totalDelta = shortestAngleDelta(st.startAngle, angle);
-    if (!st.moved && Math.abs(totalDelta) > DRAG_TAP_THRESHOLD_DEG) {
+    // Accumulate the small step-to-step delta rather than diffing against the
+    // drag's start angle, so a continuous spin past 180° keeps counting in the
+    // same direction instead of collapsing to the "short way around".
+    st.accumulatedDeg += shortestAngleDelta(st.lastAngle, angle);
+    st.lastAngle = angle;
+    if (!st.moved && Math.abs(st.accumulatedDeg) > DRAG_TAP_THRESHOLD_DEG) {
       st.moved = true;
       setIsDragging(true);
       e.currentTarget.setPointerCapture(e.pointerId);
     }
-    st.lastAngle = angle;
     if (st.moved) {
-      setDragStepOffset(totalDelta / STEP_DEG);
+      setDragStepOffset(st.accumulatedDeg / st.degPerStep);
       e.preventDefault();
     }
   };
@@ -81,7 +102,6 @@ export default function RotaryDial({ contacts, currentIndex, onSelect, onStep }:
     if (!st.active) return;
     st.active = false;
     setIsDragging(false);
-    const totalDelta = shortestAngleDelta(st.startAngle, st.lastAngle);
     if (st.moved) {
       suppressClickRef.current = true;
       setTimeout(() => {
@@ -89,7 +109,7 @@ export default function RotaryDial({ contacts, currentIndex, onSelect, onStep }:
       }, 300);
       // Rotating the physical dial clockwise (positive angle) brings lower-index
       // holes into the top slot, so the index delta is the negation of the drag.
-      onStep(-Math.round(totalDelta / STEP_DEG));
+      onStep(-Math.round(st.accumulatedDeg / st.degPerStep));
     }
     setDragStepOffset(0);
   };
@@ -100,13 +120,11 @@ export default function RotaryDial({ contacts, currentIndex, onSelect, onStep }:
   };
 
   const holes: { index: number; angleDeg: number; contact: Contact }[] = [];
-  if (total > 0) {
-    for (let i = 0; i < total; i++) {
-      let diff = i - displayIndex;
-      if (diff > total / 2) diff -= total;
-      if (diff < -total / 2) diff += total;
-      if (Math.abs(diff) <= WINDOW) holes.push({ index: i, angleDeg: -90 + diff * STEP_DEG, contact: contacts[i] });
-    }
+  for (let i = pageStart; i < pageStart + pageSize; i++) {
+    let diff = i - pageStart - localDisplay;
+    if (diff > pageSize / 2) diff -= pageSize;
+    if (diff < -pageSize / 2) diff += pageSize;
+    holes.push({ index: i, angleDeg: -90 + diff * angleStep, contact: contacts[i] });
   }
 
   return (
@@ -120,25 +138,23 @@ export default function RotaryDial({ contacts, currentIndex, onSelect, onStep }:
       >
         <div className="dial-stop" aria-hidden="true" />
         {holes.map(({ index, angleDeg, contact }) => {
-          const dist = Math.min(Math.abs(shortestAngleDelta(-90, angleDeg)), 180);
-          const opacity = Math.max(0, 1 - dist / 150);
           const isFront = index === liveIndex;
           const color = contact.color || colorForName(contact.firstName + contact.lastName);
           return (
             <div
-              key={contact.id}
+              key={index}
               className="dial-hole-orbit"
-              style={{ transform: `rotate(${angleDeg}deg) translate(${radius}px) rotate(${-angleDeg}deg)`, opacity }}
+              style={{ transform: `rotate(${angleDeg}deg) translate(${radius}px) rotate(${-angleDeg}deg)` }}
             >
               <button
                 type="button"
                 className={`dial-hole ${isFront ? "front" : ""}`}
-                style={{ background: `linear-gradient(160deg, ${color}, ${color}cc)` }}
                 onClick={() => handleHoleClick(index)}
                 aria-label={`${contact.firstName} ${contact.lastName}`.trim()}
                 tabIndex={isFront ? 0 : -1}
               >
                 {initials(contact.firstName, contact.lastName)}
+                <span className="dial-hole-dot" style={{ background: color }} aria-hidden="true" />
               </button>
             </div>
           );
@@ -168,6 +184,14 @@ export default function RotaryDial({ contacts, currentIndex, onSelect, onStep }:
           )}
         </div>
       </div>
+
+      {pageCount > 1 && (
+        <div className="dial-page-dots" aria-hidden="true">
+          {Array.from({ length: pageCount }).map((_, i) => (
+            <span key={i} className={`dial-page-dot ${i === page ? "active" : ""}`} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
