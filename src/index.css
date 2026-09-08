@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Quicksand:wght@600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Parisienne&display=swap");
 
 :root {
   color-scheme: light dark;
@@ -28,12 +28,13 @@
   --dial-face: #e9e2d3;
   --dial-hole-bg: #fffdf8;
 
-  --font-display: "Archivo", "Segoe UI", system-ui, sans-serif;
-  --font-body: "Archivo", "Segoe UI", system-ui, sans-serif;
+  /* Typewriter body/data text everywhere — matches the passport-style ID card look. */
+  --font-display: "Courier Prime", "Courier New", Courier, monospace;
+  --font-body: "Courier Prime", "Courier New", Courier, monospace;
   /* Deseo loads from the Typekit <link> in index.html — a Typekit CSS domain, so it
-     can't load inside a Claude Artifact's CSP (Google Fonts only there); Quicksand
-     is both the web-font loading fallback and the Artifact's substitute. */
-  --font-title: "deseo", "Quicksand", "Segoe UI", sans-serif;
+     can't load inside a Claude Artifact's CSP (Google Fonts only there); Parisienne
+     is both the web-font loading fallback and the Artifact's substitute cursive. */
+  --font-title: "deseo", "Parisienne", cursive;
 }
 
 @media (prefers-color-scheme: dark) {

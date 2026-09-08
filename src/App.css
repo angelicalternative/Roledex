@@ -518,9 +518,21 @@ select:focus {
   box-shadow: 0 12px 24px -18px rgba(var(--shadow), 0.4);
 }
 
+.id-card-title {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-title);
+  font-size: 28px;
+  line-height: 1;
+  color: var(--ink);
+}
+
 .id-card-body {
   display: flex;
   gap: 14px;
+  border: 1.5px dashed var(--border);
+  border-radius: 14px;
+  padding: 14px;
 }
 
 .id-photo,

@@ -30,6 +30,8 @@ export default function ContactDetailPanel({ contact, onEdit, onToggleDinner, on
 
   return (
     <div className="id-card">
+      <p className="id-card-title">Contact Card</p>
+
       <div className="id-card-body">
         {contact.photoUrl ? (
           <img className="id-photo" src={contact.photoUrl} alt="" />
