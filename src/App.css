@@ -234,22 +234,29 @@ select:focus {
   aspect-ratio: 1 / 1;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0) 45%),
-    repeating-conic-gradient(
-      from 0deg,
-      var(--dial-metal-1) 0deg 2deg,
-      var(--dial-metal-2) 2deg 4deg
-    ),
-    radial-gradient(circle at 50% 50%, var(--dial-metal-1) 0%, var(--dial-metal-3) 92%);
-  background-blend-mode: overlay, normal, normal;
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 42%),
+    radial-gradient(circle at 72% 80%, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0) 48%),
+    radial-gradient(circle at 46% 42%, var(--dial-metal-1) 0%, var(--dial-metal-2) 62%, var(--dial-metal-3) 100%);
   box-shadow:
     0 22px 40px -18px rgba(var(--shadow), 0.5),
-    inset 0 2px 5px rgba(255, 255, 255, 0.55),
-    inset 0 -4px 14px rgba(0, 0, 0, 0.3);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 2px 5px rgba(255, 255, 255, 0.5),
+    inset 0 -5px 16px rgba(0, 0, 0, 0.32);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
   cursor: grab;
+}
+
+.dial-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 .dial-frame.dragging {
