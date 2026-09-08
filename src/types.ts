@@ -8,6 +8,8 @@ export interface Contact {
   email: string;
   phone: string;
   notes: string;
+  /** Optional data URL for a headshot. Empty string when the contact has no photo. */
+  photoUrl: string;
   /** True while this person is one of the current (or a past) month's networking picks. */
   isDinnerGuest: boolean;
   dinnerNotes: string;

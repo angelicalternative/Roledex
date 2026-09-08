@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import type { Contact } from "../types";
-import { colorForName, initials } from "../lib/colors";
+import Avatar from "./Avatar";
 import { useDinnerGoals } from "../lib/storage";
 import { findMatches, getMonthKey, getMonthLabel, MONTHLY_GUEST_LIMIT, type Match } from "../lib/matching";
 
@@ -34,15 +34,12 @@ function GuestCard({
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(guest.dinnerNotes);
-  const color = guest.color || colorForName(guest.firstName + guest.lastName);
   const fullName = [guest.firstName, guest.lastName].filter(Boolean).join(" ") || "Unnamed";
 
   return (
     <div className="dinner-card">
       <div className="dinner-card-top">
-        <div className="card-avatar" style={{ background: color }}>
-          {initials(guest.firstName, guest.lastName)}
-        </div>
+        <Avatar contact={guest} />
         <div>
           <div className="dinner-card-name-row">
             <h3>{fullName}</h3>
@@ -236,14 +233,11 @@ export default function DinnerClubView({ contacts, onEdit, onToggleDinner, onPat
                 {showingList.length > 0 && (
                   <ul className="match-list">
                     {showingList.map(({ contact, matchedFields }) => {
-                      const color = contact.color || colorForName(contact.firstName + contact.lastName);
                       const fullName =
                         [contact.firstName, contact.lastName].filter(Boolean).join(" ") || "Unnamed";
                       return (
                         <li key={contact.id} className="match-row">
-                          <div className="card-avatar small" style={{ background: color }}>
-                            {initials(contact.firstName, contact.lastName)}
-                          </div>
+                          <Avatar contact={contact} small />
                           <div className="match-info">
                             <strong>{fullName}</strong>
                             <span className="match-meta">

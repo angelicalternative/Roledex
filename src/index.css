@@ -1,131 +1,98 @@
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap");
 
 :root {
   color-scheme: light dark;
 
-  --bg: #f6f0ff;
-  --bg-2: #efe1ff;
-  --surface: #ffffff;
-  --surface-2: #fbf5ff;
-  --ink: #2a1b4d;
-  --ink-soft: #6b5b8f;
-  --ink-faint: #a596c4;
-  --border: #e2d4fb;
+  --bg: #f6f1e8;
+  --bg-2: #efe6d4;
+  --surface: #fffdf8;
+  --surface-2: #f2ebdd;
+  --ink: #1c1712;
+  --ink-soft: #6b6255;
+  --ink-faint: #a89f8e;
+  --border: #ddd2bd;
 
-  --accent: #d1277e;
-  --accent-rgb: 209, 39, 126;
-  --accent-soft: #ffe3f1;
-  --accent-ink: #ffffff;
-  --accent-2: #0891a8;
-  --accent-2-rgb: 8, 145, 168;
-  --accent-2-soft: #d9f7fa;
-  --accent-2-ink: #ffffff;
+  --accent: #d9679a;
+  --accent-rgb: 217, 103, 154;
+  --accent-soft: #fbe6f0;
+  --accent-ink: #33111f;
+  --accent-2: #6f9179;
+  --accent-2-rgb: 111, 145, 121;
+  --accent-2-soft: #e7efe3;
+  --accent-2-ink: #16220f;
 
-  --danger: #e0435a;
-  --shadow: 60, 20, 120;
+  --danger: #c1584f;
+  --shadow: 40, 30, 20;
 
-  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
-  --font-accent: "Orbitron", var(--font-display);
-  --font-body: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "Space Mono", ui-monospace, "SF Mono", monospace;
+  --dial-edge: #a39a8b;
+  --dial-face: #e9e2d3;
+  --dial-hole-bg: #fffdf8;
+
+  --font-display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Archivo", "Segoe UI", system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #150a2e;
-    --bg-2: #1c0f3a;
-    --surface: #1f1140;
-    --surface-2: #190d36;
-    --ink: #f3ecff;
-    --ink-soft: #c3b3e8;
-    --ink-faint: #8577ad;
-    --border: #3a2461;
+    --bg: #17130f;
+    --bg-2: #1e1913;
+    --surface: #241f18;
+    --surface-2: #1c1712;
+    --ink: #f3ecdf;
+    --ink-soft: #c2b8a5;
+    --ink-faint: #8a8071;
+    --border: #3a3226;
 
-    --accent: #ff7ad1;
-    --accent-rgb: 255, 122, 209;
-    --accent-soft: #3a1030;
-    --accent-ink: #2a0a1f;
-    --accent-2: #2de2e6;
-    --accent-2-rgb: 45, 226, 230;
-    --accent-2-soft: #0d2b2c;
-    --accent-2-ink: #04282b;
+    --accent: #f0b8d6;
+    --accent-rgb: 240, 184, 214;
+    --accent-soft: #3a2430;
+    --accent-ink: #2c1220;
+    --accent-2: #b8cca0;
+    --accent-2-rgb: 184, 204, 160;
+    --accent-2-soft: #26301f;
+    --accent-2-ink: #1a2412;
 
-    --danger: #ff7a86;
+    --danger: #e08277;
     --shadow: 0, 0, 0;
+
+    --dial-edge: #2b2620;
+    --dial-face: #322c24;
+    --dial-hole-bg: #241f18;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #150a2e;
-  --bg-2: #1c0f3a;
-  --surface: #1f1140;
-  --surface-2: #190d36;
-  --ink: #f3ecff;
-  --ink-soft: #c3b3e8;
-  --ink-faint: #8577ad;
-  --border: #3a2461;
+  --bg: #17130f;
+  --bg-2: #1e1913;
+  --surface: #241f18;
+  --surface-2: #1c1712;
+  --ink: #f3ecdf;
+  --ink-soft: #c2b8a5;
+  --ink-faint: #8a8071;
+  --border: #3a3226;
 
-  --accent: #ff7ad1;
-  --accent-rgb: 255, 122, 209;
-  --accent-soft: #3a1030;
-  --accent-ink: #2a0a1f;
-  --accent-2: #2de2e6;
-  --accent-2-rgb: 45, 226, 230;
-  --accent-2-soft: #0d2b2c;
-  --accent-2-ink: #04282b;
+  --accent: #f0b8d6;
+  --accent-rgb: 240, 184, 214;
+  --accent-soft: #3a2430;
+  --accent-ink: #2c1220;
+  --accent-2: #b8cca0;
+  --accent-2-rgb: 184, 204, 160;
+  --accent-2-soft: #26301f;
+  --accent-2-ink: #1a2412;
 
-  --danger: #ff7a86;
+  --danger: #e08277;
   --shadow: 0, 0, 0;
+
+  --dial-edge: #2b2620;
+  --dial-face: #322c24;
+  --dial-hole-bg: #241f18;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  color: var(--ink);
-  font-family: var(--font-body);
-}
-
-body {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 12% -10%, rgba(var(--accent-rgb), 0.16), transparent 42%),
-    radial-gradient(circle at 90% 110%, rgba(var(--accent-2-rgb), 0.16), transparent 45%),
-    var(--bg);
-  background-attachment: fixed;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-button,
-input,
-textarea,
-select {
-  font-family: inherit;
-  color: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  margin: 0;
-  font-weight: 600;
-  font-family: var(--font-display);
-  text-wrap: balance;
-}
-
-::selection {
-  background: var(--accent-soft);
-  color: var(--ink);
-}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; color: var(--ink); font-family: var(--font-body); }
+body { min-height: 100vh; background: var(--bg); }
+#root { min-height: 100vh; }
+button, input, textarea, select { font-family: inherit; color: inherit; }
+button { cursor: pointer; }
+h1, h2, h3, h4 { margin: 0; font-weight: 700; font-family: var(--font-display); text-wrap: balance; }
+::selection { background: var(--accent-soft); color: var(--ink); }

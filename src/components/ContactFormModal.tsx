@@ -1,6 +1,8 @@
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import type { Contact, ContactInput } from "../types";
 import { INDUSTRY_OPTIONS } from "../types";
+import { colorForName, initials } from "../lib/colors";
+import { resizeImageFile } from "../lib/photo";
 
 interface Props {
   initial?: Contact | null;
@@ -20,6 +22,7 @@ function toInput(c?: Contact | null): ContactInput {
       email: "",
       phone: "",
       notes: "",
+      photoUrl: "",
     };
   }
   const {
@@ -37,16 +40,33 @@ function toInput(c?: Contact | null): ContactInput {
 
 export default function ContactFormModal({ initial, onSave, onDelete, onClose }: Props) {
   const [form, setForm] = useState<ContactInput>(() => toInput(initial));
+  const [photoError, setPhotoError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const isEdit = Boolean(initial);
 
   const set = <K extends keyof ContactInput>(key: K, value: ContactInput[K]) =>
     setForm((f) => ({ ...f, [key]: value }));
+
+  const handlePhotoChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    try {
+      const dataUrl = await resizeImageFile(file);
+      setPhotoError("");
+      set("photoUrl", dataUrl);
+    } catch {
+      setPhotoError("Couldn't load that photo — try a different file.");
+    }
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!form.firstName.trim() && !form.lastName.trim()) return;
     onSave(form);
   };
+
+  const avatarColor = colorForName(form.firstName + form.lastName);
 
   return (
     <div className="modal-backdrop" onMouseDown={onClose}>
@@ -58,6 +78,31 @@ export default function ContactFormModal({ initial, onSave, onDelete, onClose }:
           </button>
         </div>
         <form onSubmit={handleSubmit} className="contact-form">
+          <div className="photo-field">
+            <button
+              type="button"
+              className="photo-preview"
+              onClick={() => fileInputRef.current?.click()}
+              aria-label={form.photoUrl ? "Change photo" : "Add a photo"}
+            >
+              {form.photoUrl ? (
+                <img src={form.photoUrl} alt="" />
+              ) : (
+                <span className="photo-placeholder" style={{ background: avatarColor }}>
+                  {initials(form.firstName, form.lastName)}
+                </span>
+              )}
+              <span className="photo-edit-badge">{form.photoUrl ? "Change" : "+ Add photo"}</span>
+            </button>
+            <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={handlePhotoChange} />
+            {form.photoUrl && (
+              <button type="button" className="link-btn" onClick={() => set("photoUrl", "")}>
+                Remove photo
+              </button>
+            )}
+            {photoError && <p className="import-error">{photoError}</p>}
+          </div>
+
           <div className="form-row">
             <label>
               First name

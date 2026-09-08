@@ -19,6 +19,7 @@ function App() {
   const [showImport, setShowImport] = useState(false);
   const [toast, setToast] = useState("");
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [spinResetToken, setSpinResetToken] = useState(0);
 
   const notify = useCallback((message: string) => {
     setToast(message);
@@ -64,6 +65,7 @@ function App() {
   const toggleDinner = (id: string) => {
     const monthKey = getMonthKey();
     let blocked = false;
+    let added = false;
     setContacts((prev) => {
       const target = prev.find((c) => c.id === id);
       if (!target) return prev;
@@ -74,6 +76,7 @@ function App() {
           blocked = true;
           return prev;
         }
+        added = true;
         return prev.map((c) =>
           c.id === id ? { ...c, isDinnerGuest: true, dinnerMonth: monthKey, updatedAt: Date.now() } : c,
         );
@@ -82,6 +85,9 @@ function App() {
     });
     if (blocked) {
       notify(`Your ${MONTHLY_GUEST_LIMIT} networking picks for ${getMonthLabel(monthKey)} are already set — remove one first.`);
+    }
+    if (added) {
+      setSpinResetToken((t) => t + 1);
     }
   };
 
@@ -158,6 +164,7 @@ function App() {
             onEdit={(c) => setFormTarget(c)}
             onToggleDinner={toggleDinner}
             onPatch={patchContact}
+            spinResetToken={spinResetToken}
           />
         ) : (
           <DinnerClubView

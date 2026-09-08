@@ -16,6 +16,7 @@ function blankInput(): ContactInput {
     email: "",
     phone: "",
     notes: "",
+    photoUrl: "",
   };
 }
 
