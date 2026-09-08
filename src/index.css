@@ -34,10 +34,9 @@
   /* Typewriter body/data text everywhere — matches the passport-style ID card look. */
   --font-display: "Courier Prime", "Courier New", Courier, monospace;
   --font-body: "Courier Prime", "Courier New", Courier, monospace;
-  /* Medusa loads from the Typekit <link> in index.html — a Typekit CSS domain, so it
-     can't load inside a Claude Artifact's CSP (Google Fonts only there); the Artifact
-     falls back to plain sans-serif, matching Medusa's own fallback stack. */
-  --font-title: "medusa", sans-serif;
+  /* Ballet loads from the Google Fonts <link> in index.html — a flowing script face
+     for the passport-style title lettering. */
+  --font-title: "Ballet", cursive;
 }
 
 @media (prefers-color-scheme: dark) {
