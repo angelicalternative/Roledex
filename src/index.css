@@ -28,13 +28,16 @@
   --dial-face: #e9e2d3;
   --dial-hole-bg: #fffdf8;
 
+  --paper: #f2e8d2;
+  --paper-2: #e9dcbe;
+
   /* Typewriter body/data text everywhere — matches the passport-style ID card look. */
   --font-display: "Courier Prime", "Courier New", Courier, monospace;
   --font-body: "Courier Prime", "Courier New", Courier, monospace;
-  /* Deseo loads from the Typekit <link> in index.html — a Typekit CSS domain, so it
-     can't load inside a Claude Artifact's CSP (Google Fonts only there); Parisienne
-     is both the web-font loading fallback and the Artifact's substitute cursive. */
-  --font-title: "deseo", "Parisienne", cursive;
+  /* Medusa loads from the Typekit <link> in index.html — a Typekit CSS domain, so it
+     can't load inside a Claude Artifact's CSP (Google Fonts only there); the Artifact
+     falls back to plain sans-serif, matching Medusa's own fallback stack. */
+  --font-title: "medusa", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -63,6 +66,9 @@
     --dial-edge: #2b2620;
     --dial-face: #322c24;
     --dial-hole-bg: #241f18;
+
+    --paper: #2c2519;
+    --paper-2: #241e14;
   }
 }
 
@@ -91,6 +97,9 @@
   --dial-edge: #2b2620;
   --dial-face: #322c24;
   --dial-hole-bg: #241f18;
+
+  --paper: #2c2519;
+  --paper-2: #241e14;
 }
 
 * { box-sizing: border-box; }
@@ -100,5 +109,5 @@ body { min-height: 100vh; background: var(--bg); }
 button, input, textarea, select { font-family: inherit; color: inherit; }
 button { cursor: pointer; }
 h1, h2, h3, h4 { margin: 0; font-weight: 700; font-family: var(--font-display); text-wrap: balance; }
-h1, h2 { font-family: var(--font-title); }
+h1, h2 { font-family: var(--font-title); font-weight: 400; font-style: normal; }
 ::selection { background: var(--accent-soft); color: var(--ink); }
